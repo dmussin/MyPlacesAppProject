@@ -209,7 +209,6 @@
                                                         </label>
                                                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Place type" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eU7-PM-TuN">
                                                             <rect key="frame" x="0.0" y="37.5" width="382" height="25.5"/>
-                                                            <color key="textColor" systemColor="systemOrangeColor"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                                                             <connections>
@@ -239,16 +238,22 @@
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="wSk-Yg-yR0">
                             <color key="tintColor" systemColor="systemOrangeColor"/>
                             <connections>
-                                <action selector="cancelAction:" destination="ihV-zg-xAH" id="oZA-mi-sfj"/>
-                                <segue destination="ihV-zg-xAH" kind="unwind" unwindAction="cancelAction:" id="DsN-jJ-Rkr"/>
+                                <action selector="cancelAction:" destination="Vkb-oM-dwn" id="7Qk-qt-Obh"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="caO-Jv-EW6">
                             <color key="tintColor" systemColor="systemOrangeColor"/>
+                            <connections>
+                                <segue destination="ihV-zg-xAH" kind="unwind" unwindAction="unwindSegue:" id="6Ve-1g-kI8"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="imageOfPlace" destination="dzI-pz-2Zc" id="SPx-E4-n9y"/>
+                        <outlet property="placeImage" destination="dzI-pz-2Zc" id="SPx-E4-n9y"/>
+                        <outlet property="placeLocation" destination="vtR-1O-6UG" id="k8Q-IG-rsN"/>
+                        <outlet property="placeName" destination="vtD-Aj-Sco" id="mGb-6G-4aY"/>
+                        <outlet property="placeType" destination="eU7-PM-TuN" id="qny-h9-hq3"/>
+                        <outlet property="saveButton" destination="caO-Jv-EW6" id="UdL-eN-wpI"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g6T-Mh-MLE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -8,8 +8,18 @@
 import UIKit
 
 class NewPlaceViewController: UITableViewController {
+    
+    // declaring an example of PLACE
+    var newPlace: Place?
+    // default image to icon
+    var imageIsChanged = false
+    
 
-    @IBOutlet weak var imageOfPlace: UIImageView!
+    @IBOutlet weak var placeImage: UIImageView!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var placeName: UITextField!
+    @IBOutlet weak var placeLocation: UITextField!
+    @IBOutlet weak var placeType: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,6 +27,10 @@ class NewPlaceViewController: UITableViewController {
         // hiding empty lines in footer
         
         tableView.tableFooterView = UIView()
+        
+        // disabling SAVE button until filelds will be completed
+        saveButton.isEnabled = false
+        placeName.addTarget(self, action: #selector(textFiledChanged), for: .editingChanged)
 
 }
 
@@ -59,6 +73,33 @@ class NewPlaceViewController: UITableViewController {
             view.endEditing(true)
         }
     }
+    
+    
+    // creating a method for save button action
+    func saveNewPlace(){
+        
+        // setting up image to default or that will be chosen
+        var image: UIImage?
+        
+        if imageIsChanged{
+            image = placeImage.image
+        } else {
+            image = #imageLiteral(resourceName: "imagePlaceholder")
+        }
+        
+        newPlace = Place(name: placeName.text!,
+                         location: placeLocation.text,
+                         type: placeType.text,
+                         image: image,
+                         restaurantImage: nil)
+    }
+    
+    
+    // Cancel button action
+    @IBAction func cancelAction(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
+    }
+    
 }
 
 // MARK: Text field delegate
@@ -70,6 +111,14 @@ extension NewPlaceViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    @objc private func textFiledChanged() {
+        if placeName.text?.isEmpty == false {
+            saveButton.isEnabled = true
+        } else {
+            saveButton.isEnabled = false
+        }
     }
 }
 
@@ -91,9 +140,12 @@ extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationC
     
     // picking image and changing the black image
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        imageOfPlace.image = info[.editedImage] as? UIImage
-        imageOfPlace.contentMode = .scaleAspectFill
-        imageOfPlace.clipsToBounds = true
+        placeImage.image = info[.editedImage] as? UIImage
+        placeImage.contentMode = .scaleAspectFill
+        placeImage.clipsToBounds = true
+        
+        imageIsChanged = true //
+        
         dismiss(animated: true, completion: nil)
     }
     
