@@ -10,8 +10,10 @@ import UIKit
 class NewPlaceViewController: UITableViewController {
     
    
-    // default image to icon
-    var imageIsChanged = false
+    
+    
+    var currentPlace: Place? // creating an object for segue navigation (editing a record) 
+    var imageIsChanged = false   // default image to icon
     
 
     @IBOutlet weak var placeImage: UIImageView!
@@ -31,6 +33,8 @@ class NewPlaceViewController: UITableViewController {
         saveButton.isEnabled = false
         placeName.addTarget(self, action: #selector(textFiledChanged), for: .editingChanged)
 
+        // calling method setupEditScreen
+        setupEditScreen()
 }
 
    // MARK: Table view delegate
@@ -75,7 +79,7 @@ class NewPlaceViewController: UITableViewController {
     
     
     // creating a method for save button action
-    func saveNewPlace(){
+    func savePlace(){
         
         // setting up image to default or that will be chosen
         var image: UIImage?
@@ -91,9 +95,49 @@ class NewPlaceViewController: UITableViewController {
         
         let newPlace = Place(name: placeName.text!, location: placeLocation.text!, type: placeType.text!, imageData: imageData)
         
-        // saving object in DB
-        StorageManager.saveObject(newPlace )
+        // checking mode creation or editing
+        
+        if currentPlace != nil {
+            try! realm.write { //Updating the record.
+                currentPlace?.name = newPlace.name
+                currentPlace?.location = newPlace.location
+                currentPlace?.type = newPlace.type
+                currentPlace?.imageData = newPlace.imageData
+            }
+        } else {
+        StorageManager.saveObject(newPlace ) // saving object in DB
+    }
+}
     
+    // setting currentPlace data to outlets after recieveing object from DB
+    private func setupEditScreen() {
+        if currentPlace != nil {
+            
+            setUpNavigationBar()
+            
+            imageIsChanged = true // stopping change the image to default during editing 
+            
+            guard let data = currentPlace?.imageData, let image = UIImage(data: data) else { return }
+            
+            placeImage.image = image
+            placeImage.contentMode = .scaleAspectFill
+            placeName.text = currentPlace?.name
+            placeLocation.text = currentPlace?.location
+            placeType.text = currentPlace?.type
+        }
+    }
+    
+    
+    // Navigation Bar - Back Button instead of Cancel.
+    private func setUpNavigationBar(){
+        
+        if let topItem = navigationController?.navigationBar.topItem {
+            topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil) // Changing NavigationBar Button Name and Style.
+        }
+        
+        navigationItem.leftBarButtonItem = nil
+        title = currentPlace?.name
+        saveButton.isEnabled = true
     }
     
     
