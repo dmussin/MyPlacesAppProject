@@ -44,6 +44,43 @@ class MainViewController: UITableViewController {
     }
     
     
+    //MARK: - Table view delegate
+    // different options by swiping on left
+    
+//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//
+//        let place = places[indexPath.row]
+//        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, complete in
+//
+//            StorageManager.deleteObject(place)
+//            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+//            complete(true)
+//           }
+//
+//           deleteAction.backgroundColor = .red
+//
+//           let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+//           configuration.performsFirstActionWithFullSwipe = true
+//           return configuration
+//       }
+//
+//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//           return true
+//       }
+//
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let place = places[indexPath.row]
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (_, _) in
+
+            StorageManager.deleteObject(place)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+    }
+
+        return [deleteAction]
+    }
+    
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
