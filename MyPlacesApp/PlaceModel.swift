@@ -5,18 +5,18 @@
 //  Created by Daniyar Mussin on 29.04.2021.
 //
 
-import UIKit
+import RealmSwift
 
-struct Place {
+class Place: Object {
     
-    var name: String
-    var location: String?
-    var type: String?
-    var image: UIImage?
-    var restaurantImage: String?
+    @objc dynamic var name = ""
+    @objc dynamic var location: String?
+    @objc dynamic var type: String?
+    @objc dynamic var imageData: Data?
+   // var restaurantImage: String?
  
     
-      static let restaurantNames = [
+       let restaurantNames = [
             "Yami Sushi", "Saigon", "Kebab King",
             "Brux", "Letnanska Terasa", "KFC", "Burger King",
             "Tavern", "Tom's Burger", "Kantyna", "Chilli and Lime",
@@ -25,16 +25,23 @@ struct Place {
     
     
     // method which generates test names from restourantNames
-   static func getPalces()-> [Place] {
-        
-        var places = [Place]()
+    func savePlaces() {
         
         for place in restaurantNames {
-            places.append(Place(name: place, location: "Prague", type: "Restaurant", image: nil, restaurantImage: place))
+            
+            
+           let image = UIImage(named: place)
+           guard let imageData = image?.pngData() else { return } // convertion to type Data for Realm
+            
+           let newPlace = Place()
+            
+            newPlace.name = place
+            newPlace.location = "Prague"
+            newPlace.type = "Restaurant"
+            newPlace.imageData = imageData
+            
+            StorageManager.saveObject(newPlace)
         }
-        
-        
-        return places
     }
     
 }
