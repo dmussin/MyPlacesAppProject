@@ -9,8 +9,7 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
     
-    // declaring an example of PLACE
-    var newPlace = Place()
+   
     // default image to icon
     var imageIsChanged = false
     
@@ -24,12 +23,8 @@ class NewPlaceViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        DispatchQueue.main.async {
-            self.newPlace.savePlaces() // saving to DB
-        }
         
         // hiding empty lines in footer
-        
         tableView.tableFooterView = UIView()
         
         // disabling SAVE button until filelds will be completed
@@ -91,11 +86,14 @@ class NewPlaceViewController: UITableViewController {
             image = #imageLiteral(resourceName: "imagePlaceholder")
         }
         
-//        newPlace = Place(name: placeName.text!,
-//                         location: placeLocation.text,
-//                         type: placeType.text,
-//                         image: image,
-//                         restaurantImage: nil)
+        //Converting type image to Data.
+        let imageData = image?.pngData()
+        
+        let newPlace = Place(name: placeName.text!, location: placeLocation.text!, type: placeType.text!, imageData: imageData)
+        
+        // saving object in DB
+        StorageManager.saveObject(newPlace )
+    
     }
     
     
