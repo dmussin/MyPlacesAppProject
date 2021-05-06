@@ -14,7 +14,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // recieving data from DB
     var places: Results<Place>!
     
+    // Ascending sorting
+    var ascendingSorting = true
+    
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var reversedSortingButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -102,7 +108,38 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         guard let newPlaceVC = segue.source as? NewPlaceViewController else { return }
         newPlaceVC.savePlace()
         tableView.reloadData() // updating interface
+    }
+    
+    // Sorting by name / date while using sender control.
+    @IBAction func sortSelection(_ sender: UISegmentedControl) {
         
+       sorting() // calling sorting method 
+    }
+    
+    // Ascending sorting button image change
+    @IBAction func reversedSorting(_ sender: UIBarButtonItem) {
+          
+        ascendingSorting.toggle()
+        
+        if ascendingSorting {
+            reversedSortingButton.image = UIImage(systemName: "arrowtriangle.down.fill")
+        } else {
+            reversedSortingButton.image = UIImage(systemName: "arrowtriangle.up.fill")
+        }
+        
+        sorting() // calling sorting method
+    }
+    
+    // Ascending sorting method
+    private func sorting() {
+        
+        if segmentedControl.selectedSegmentIndex == 0 {
+            places = places.sorted(byKeyPath: "date", ascending: ascendingSorting)
+        } else {
+            places = places.sorted(byKeyPath: "name", ascending: ascendingSorting)
+        }
+        
+        tableView.reloadData()
     }
 }
 

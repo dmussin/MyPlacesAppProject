@@ -260,6 +260,9 @@
                                     <segment title="Name"/>
                                 </segments>
                                 <color key="selectedSegmentTintColor" systemColor="systemOrangeColor"/>
+                                <connections>
+                                    <action selector="sortSelection:" destination="NsM-nC-qcf" eventType="valueChanged" id="ul0-kc-K1T"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="w8b-C0-9nF"/>
@@ -277,6 +280,9 @@
                     <navigationItem key="navigationItem" title="My Places 🍔" largeTitleDisplayMode="never" id="Ysj-5h-syZ">
                         <barButtonItem key="leftBarButtonItem" title="Item" image="arrowtriangle.down.fill" catalog="system" id="ODF-gb-4B2">
                             <color key="tintColor" systemColor="systemOrangeColor"/>
+                            <connections>
+                                <action selector="reversedSorting:" destination="NsM-nC-qcf" id="SJm-zU-kyg"/>
+                            </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="8EV-Ng-yEz">
                             <color key="tintColor" systemColor="systemOrangeColor"/>
@@ -286,6 +292,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="reversedSortingButton" destination="ODF-gb-4B2" id="5mW-4t-xY0"/>
+                        <outlet property="segmentedControl" destination="XuN-Tl-rGt" id="Bv0-tM-e2y"/>
                         <outlet property="tableView" destination="eOa-Md-E2r" id="hwK-3R-z5m"/>
                     </connections>
                 </viewController>
@@ -298,7 +306,7 @@
             <objects>
                 <navigationController id="HXH-Zh-X91" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fCK-0u-9kU">
-                        <rect key="frame" x="0.0" y="44" width="414" height="104"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="AppleSDGothicNeo-Medium" family="Apple SD Gothic Neo" pointSize="29"/>
