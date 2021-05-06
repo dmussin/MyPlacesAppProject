@@ -10,12 +10,22 @@ import RealmSwift
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-
+    // Search Controller - nil, because we want to transver data to the same view that we using
+   private let searchController = UISearchController(searchResultsController: nil)
     // recieving data from DB
-    var places: Results<Place>!
-    
+   private var places: Results<Place>!
     // Ascending sorting
-    var ascendingSorting = true
+   private var ascendingSorting = true
+    // Filter
+   private var filtredPlaces: Results<Place>!
+   private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    // tracking searhing request
+    private var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -26,20 +36,36 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         places = realm.objects(Place.self) //Displaying data from DB.
         
-        
+        // Setup the search controller
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false // Interacting with the VC
+        searchController.searchBar.placeholder = "Search" // name for search bar
+        navigationItem.searchController = searchController // integrating search bar to the navigation bar
+        definesPresentationContext = true // hiding when moving to other screen
     }
 
     // MARK: - Table view data source
 
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // if isFiltering true - returning results from array
+        if isFiltering {
+            return filtredPlaces.count
+        }
         return places.isEmpty ? 0 : places.count //If empty return 0 else counts from DB
     }
 
     // Config cell, setting up name, location, type, image
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
-
-        let place = places[indexPath.row]
+        
+        var place = Place()
+        
+        // if filtered - showing results else data from DB.
+        if isFiltering {
+            place = filtredPlaces[indexPath.row]
+        } else {
+            place = places[indexPath.row]
+        }
 
         cell.nameLabel.text = place.name
         cell.locationLabel.text = place.location
@@ -55,28 +81,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     //MARK: - Table view delegate
     // different options by swiping on left
-    
-//    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//
-//        let place = places[indexPath.row]
-//        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, complete in
-//
-//            StorageManager.deleteObject(place)
-//            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-//            complete(true)
-//           }
-//
-//           deleteAction.backgroundColor = .red
-//
-//           let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
-//           configuration.performsFirstActionWithFullSwipe = true
-//           return configuration
-//       }
-//
-//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//           return true
-//       }
-//
     
      func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let place = places[indexPath.row]
@@ -95,7 +99,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             guard let indexPath = tableView.indexPathForSelectedRow else { return } // getting current index for selected row.
-            let place = places[indexPath.row] // extracting object from Places using this index
+            
+            let place: Place
+            if isFiltering {
+                place = filtredPlaces[indexPath.row]
+            } else {
+                place = places[indexPath.row]
+            }
+            
             let newPlaceVC = segue.destination as! NewPlaceViewController
             newPlaceVC.currentPlace = place // send object to NewPlaceViewControler
         }
@@ -113,7 +124,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // Sorting by name / date while using sender control.
     @IBAction func sortSelection(_ sender: UISegmentedControl) {
         
-       sorting() // calling sorting method 
+       sorting() // calling sorting method
     }
     
     // Ascending sorting button image change
@@ -143,3 +154,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 }
 
+extension MainViewController: UISearchResultsUpdating{
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!) // value from searchbar text
+    }
+    
+    // Filtering the content
+    private func filterContentForSearchText(_ searchText: String) {
+        filtredPlaces = places.filter("name CONTAINS[c] %@ OR location CONTAINS[c] %@", searchText, searchText)
+        
+        tableView.reloadData()
+    }
+}
