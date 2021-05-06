@@ -80,8 +80,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     
     //MARK: - Table view delegate
-    // different options by swiping on left
     
+    // unmarking line after selection
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    
+    // different options by swiping on left
      func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let place = places[indexPath.row]
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (_, _) in

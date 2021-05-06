@@ -27,7 +27,7 @@ class NewPlaceViewController: UITableViewController {
         
         
         // hiding empty lines in footer
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
         
         // disabling SAVE button until filelds will be completed
         saveButton.isEnabled = false

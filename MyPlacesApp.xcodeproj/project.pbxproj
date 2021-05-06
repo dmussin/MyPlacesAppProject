@@ -17,6 +17,7 @@
 		D3002BED263AEFF30093EBC1 /* PlaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3002BEC263AEFF30093EBC1 /* PlaceModel.swift */; };
 		D35B0FCD264052D100AD01D5 /* NewPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35B0FCC264052D100AD01D5 /* NewPlaceViewController.swift */; };
 		D35B0FCF26407EEC00AD01D5 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35B0FCE26407EEC00AD01D5 /* StorageManager.swift */; };
+		D385657426445F05004761BC /* RatingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D385657326445F05004761BC /* RatingControl.swift */; };
 		E7FF1FE6F885BCD21E8B77F5 /* Pods_MyPlacesApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4B79442BB17EC4A5B50665 /* Pods_MyPlacesApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +37,7 @@
 		D3002BEC263AEFF30093EBC1 /* PlaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceModel.swift; sourceTree = "<group>"; };
 		D35B0FCC264052D100AD01D5 /* NewPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlaceViewController.swift; sourceTree = "<group>"; };
 		D35B0FCE26407EEC00AD01D5 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		D385657326445F05004761BC /* RatingControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				D3002BD52639B8E60093EBC1 /* Main.storyboard */,
 				D35B0FCC264052D100AD01D5 /* NewPlaceViewController.swift */,
 				D3002BEC263AEFF30093EBC1 /* PlaceModel.swift */,
+				D385657326445F05004761BC /* RatingControl.swift */,
 				D35B0FCE26407EEC00AD01D5 /* StorageManager.swift */,
 				D3002BD82639B8E80093EBC1 /* Assets.xcassets */,
 				D3002BDA2639B8E80093EBC1 /* LaunchScreen.storyboard */,
@@ -223,6 +226,7 @@
 				D35B0FCF26407EEC00AD01D5 /* StorageManager.swift in Sources */,
 				D3002BED263AEFF30093EBC1 /* PlaceModel.swift in Sources */,
 				D3002BE9263AE68B0093EBC1 /* CustomTableViewCell.swift in Sources */,
+				D385657426445F05004761BC /* RatingControl.swift in Sources */,
 				D3002BD22639B8E60093EBC1 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
