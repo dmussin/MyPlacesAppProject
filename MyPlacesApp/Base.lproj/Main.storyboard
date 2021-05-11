@@ -160,11 +160,33 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </stackView>
+                                                <view contentMode="scaleToFill" placeholderIntrinsicWidth="170" placeholderIntrinsicHeight="30" translatesAutoresizingMaskIntoConstraints="NO" id="bPz-MC-VME" customClass="CosmosView" customModule="Cosmos">
+                                                    <rect key="frame" x="122" y="55" width="170" height="30"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="starSize">
+                                                            <real key="value" value="30"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="emptyBorderWidth">
+                                                            <real key="value" value="1"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="emptyBorderColor">
+                                                            <color key="value" systemColor="systemOrangeColor"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="kAf-OW-vxN" firstAttribute="centerX" secondItem="svv-n0-eqk" secondAttribute="centerX" id="XTD-5S-IDP"/>
                                                 <constraint firstItem="kAf-OW-vxN" firstAttribute="centerY" secondItem="svv-n0-eqk" secondAttribute="centerY" id="aip-dO-8Ny"/>
+                                                <constraint firstItem="bPz-MC-VME" firstAttribute="centerY" secondItem="svv-n0-eqk" secondAttribute="centerY" id="egs-ai-wx1"/>
+                                                <constraint firstItem="bPz-MC-VME" firstAttribute="centerX" secondItem="svv-n0-eqk" secondAttribute="centerX" id="hVY-F3-VBK"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="subviews">
+                                                    <exclude reference="kAf-OW-vxN"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -190,6 +212,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="cosmosView" destination="bPz-MC-VME" id="CwS-52-FLP"/>
                         <outlet property="placeImage" destination="dzI-pz-2Zc" id="SPx-E4-n9y"/>
                         <outlet property="placeLocation" destination="vtR-1O-6UG" id="k8Q-IG-rsN"/>
                         <outlet property="placeName" destination="vtD-Aj-Sco" id="mGb-6G-4aY"/>
@@ -201,7 +224,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g6T-Mh-MLE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="ihV-zg-xAH" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="541" y="-48"/>
+            <point key="canvasLocation" x="540.57971014492762" y="-48.214285714285715"/>
         </scene>
         <!--My Places 🍔-->
         <scene sceneID="qET-mV-Ls9">
@@ -211,11 +234,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="XuN-Tl-rGt">
+                                <rect key="frame" x="0.0" y="88" width="414" height="32"/>
+                                <segments>
+                                    <segment title="Date"/>
+                                    <segment title="Name"/>
+                                </segments>
+                                <color key="selectedSegmentTintColor" systemColor="systemOrangeColor"/>
+                                <connections>
+                                    <action selector="sortSelection:" destination="NsM-nC-qcf" eventType="valueChanged" id="ul0-kc-K1T"/>
+                                </connections>
+                            </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="85" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="eOa-Md-E2r">
                                 <rect key="frame" x="0.0" y="121" width="414" height="775"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="DQZ-K6-VdZ" customClass="CustomTableViewCell" customModule="MyPlacesApp" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="Cell" id="DQZ-K6-VdZ" customClass="CustomTableViewCell" customModule="MyPlacesApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="24.5" width="414" height="85"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="DQZ-K6-VdZ" id="4Y3-q0-fOH">
@@ -230,39 +264,56 @@
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="pFc-hM-hrr">
-                                                    <rect key="frame" x="96" y="8" width="302" height="69"/>
+                                                    <rect key="frame" x="96" y="8" width="54.5" height="69"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hrW-EC-IPo">
-                                                            <rect key="frame" x="0.0" y="0.0" width="302" height="24.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="54.5" height="24.5"/>
                                                             <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="18"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cuq-s0-uRw">
-                                                            <rect key="frame" x="0.0" y="27.5" width="302" height="20"/>
+                                                            <rect key="frame" x="0.0" y="27.5" width="54.5" height="20"/>
                                                             <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="15"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="17j-eh-LqO">
-                                                            <rect key="frame" x="0.0" y="50.5" width="302" height="18.5"/>
+                                                            <rect key="frame" x="0.0" y="50.5" width="54.5" height="18.5"/>
                                                             <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="13"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
                                                 </stackView>
+                                                <view contentMode="scaleToFill" placeholderIntrinsicWidth="140" placeholderIntrinsicHeight="25" translatesAutoresizingMaskIntoConstraints="NO" id="OI9-Bz-Y2U" customClass="CosmosView" customModule="Cosmos">
+                                                    <rect key="frame" x="263" y="30" width="90" height="25"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="90" id="TSK-XQ-adw"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="starSize">
+                                                            <real key="value" value="14"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fillMode">
+                                                            <integer key="value" value="1"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="pFc-hM-hrr" secondAttribute="trailing" constant="16" id="FjO-wQ-nTc"/>
+                                                <constraint firstItem="OI9-Bz-Y2U" firstAttribute="centerY" secondItem="4Y3-q0-fOH" secondAttribute="centerY" id="5H1-aM-cUJ"/>
                                                 <constraint firstAttribute="bottom" secondItem="pFc-hM-hrr" secondAttribute="bottom" constant="8" id="LsP-1m-4K9"/>
                                                 <constraint firstItem="xTu-6o-7mc" firstAttribute="leading" secondItem="4Y3-q0-fOH" secondAttribute="leading" constant="15" id="PmO-t5-Iyb"/>
                                                 <constraint firstItem="pFc-hM-hrr" firstAttribute="leading" secondItem="xTu-6o-7mc" secondAttribute="trailing" constant="16" id="Qe2-4G-zi9"/>
                                                 <constraint firstItem="pFc-hM-hrr" firstAttribute="top" secondItem="4Y3-q0-fOH" secondAttribute="top" constant="8" id="VD8-Il-omr"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="OI9-Bz-Y2U" secondAttribute="trailing" constant="41" id="fVw-GY-t5x"/>
                                                 <constraint firstItem="xTu-6o-7mc" firstAttribute="centerY" secondItem="4Y3-q0-fOH" secondAttribute="centerY" id="sAD-nC-waI"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="cosmosView" destination="OI9-Bz-Y2U" id="MQi-Af-6OO"/>
                                             <outlet property="imageOfPlace" destination="xTu-6o-7mc" id="XAA-h8-vDM"/>
                                             <outlet property="locationLabel" destination="Cuq-s0-uRw" id="YO6-oA-jrC"/>
                                             <outlet property="nameLabel" destination="hrW-EC-IPo" id="lq3-rb-wiu"/>
@@ -276,17 +327,6 @@
                                     <outlet property="delegate" destination="NsM-nC-qcf" id="EeI-Nu-EGv"/>
                                 </connections>
                             </tableView>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="XuN-Tl-rGt">
-                                <rect key="frame" x="0.0" y="88" width="414" height="32"/>
-                                <segments>
-                                    <segment title="Date"/>
-                                    <segment title="Name"/>
-                                </segments>
-                                <color key="selectedSegmentTintColor" systemColor="systemOrangeColor"/>
-                                <connections>
-                                    <action selector="sortSelection:" destination="NsM-nC-qcf" eventType="valueChanged" id="ul0-kc-K1T"/>
-                                </connections>
-                            </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="w8b-C0-9nF"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -363,6 +403,12 @@
         </scene>
     </scenes>
     <designables>
+        <designable name="OI9-Bz-Y2U">
+            <size key="intrinsicContentSize" width="140" height="25"/>
+        </designable>
+        <designable name="bPz-MC-VME">
+            <size key="intrinsicContentSize" width="170" height="30"/>
+        </designable>
         <designable name="kAf-OW-vxN">
             <size key="intrinsicContentSize" width="252" height="44"/>
         </designable>

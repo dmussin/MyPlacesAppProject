@@ -42,6 +42,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         searchController.searchBar.placeholder = "Search" // name for search bar
         navigationItem.searchController = searchController // integrating search bar to the navigation bar
         definesPresentationContext = true // hiding when moving to other screen
+        
+        
+        
+        
     }
 
     // MARK: - Table view data source
@@ -58,23 +62,22 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
         
-        var place = Place()
+//        var place = Place()
         
         // if filtered - showing results else data from DB.
-        if isFiltering {
-            place = filtredPlaces[indexPath.row]
-        } else {
-            place = places[indexPath.row]
-        }
+        let place = isFiltering ? filtredPlaces[indexPath.row] : places[indexPath.row]
+//        if isFiltering {
+//            place = filtredPlaces[indexPath.row]
+//        } else {
+//            place = places[indexPath.row]
+//        }
 
         cell.nameLabel.text = place.name
         cell.locationLabel.text = place.location
         cell.typeLabel.text = place.type
         cell.imageOfPlace.image = UIImage(data: place.imageData!)
-
-        cell.imageOfPlace.layer.cornerRadius = cell.imageOfPlace.frame.size.height / 2.1
-        cell.imageOfPlace.clipsToBounds = true
-
+        cell.cosmosView.rating = place.rating // setting rating from DB to rows.
+        
         return cell
     }
     
@@ -106,12 +109,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if segue.identifier == "showDetail" {
             guard let indexPath = tableView.indexPathForSelectedRow else { return } // getting current index for selected row.
             
-            let place: Place
-            if isFiltering {
-                place = filtredPlaces[indexPath.row]
-            } else {
-                place = places[indexPath.row]
-            }
+//            let place: Place
+//            if isFiltering {
+//                place = filtredPlaces[indexPath.row]
+//            } else {
+//                place = places[indexPath.row]
+//            }
+            let place = isFiltering ? filtredPlaces[indexPath.row] : places[indexPath.row]
             
             let newPlaceVC = segue.destination as! NewPlaceViewController
             newPlaceVC.currentPlace = place // send object to NewPlaceViewControler

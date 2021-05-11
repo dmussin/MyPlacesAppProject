@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Cosmos
 
 class NewPlaceViewController: UITableViewController {
     
@@ -14,6 +15,7 @@ class NewPlaceViewController: UITableViewController {
     
     var currentPlace: Place! // creating an object for segue navigation (editing a record)
     var imageIsChanged = false   // default image to icon
+    var currentRating = 0.0 // var for rating(cosmos)
     
 
     @IBOutlet weak var placeImage: UIImageView!
@@ -22,6 +24,7 @@ class NewPlaceViewController: UITableViewController {
     @IBOutlet weak var placeLocation: UITextField!
     @IBOutlet weak var placeType: UITextField!
     @IBOutlet weak var ratingControl: RatingControl!
+    @IBOutlet weak var cosmosView: CosmosView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +39,12 @@ class NewPlaceViewController: UITableViewController {
 
         // calling method setupEditScreen
         setupEditScreen()
+        
+        // Cosmos framework init
+        cosmosView.settings.fillMode = .half
+        cosmosView.didTouchCosmos = {
+            rating in self.currentRating = rating
+        }
 }
 
    // MARK: Table view delegate
@@ -98,7 +107,7 @@ class NewPlaceViewController: UITableViewController {
                              location: placeLocation.text!,
                              type: placeType.text!,
                              imageData: imageData,
-                             rating: Double(ratingControl.rating))
+                             rating: currentRating)
         
         // checking mode creation or editing
         if currentPlace != nil {
@@ -129,7 +138,7 @@ class NewPlaceViewController: UITableViewController {
             placeName.text = currentPlace?.name
             placeLocation.text = currentPlace?.location
             placeType.text = currentPlace?.type
-            ratingControl.rating = Int(currentPlace.rating) // showing sorting rating
+            cosmosView.rating = currentPlace.rating // showing sorting rating
         }
     }
     
