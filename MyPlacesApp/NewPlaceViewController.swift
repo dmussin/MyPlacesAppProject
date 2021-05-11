@@ -12,7 +12,7 @@ class NewPlaceViewController: UITableViewController {
    
     
     
-    var currentPlace: Place? // creating an object for segue navigation (editing a record) 
+    var currentPlace: Place! // creating an object for segue navigation (editing a record)
     var imageIsChanged = false   // default image to icon
     
 
@@ -21,6 +21,7 @@ class NewPlaceViewController: UITableViewController {
     @IBOutlet weak var placeName: UITextField!
     @IBOutlet weak var placeLocation: UITextField!
     @IBOutlet weak var placeType: UITextField!
+    @IBOutlet weak var ratingControl: RatingControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,16 +94,20 @@ class NewPlaceViewController: UITableViewController {
         //Converting type image to Data.
         let imageData = image?.pngData()
         
-        let newPlace = Place(name: placeName.text!, location: placeLocation.text!, type: placeType.text!, imageData: imageData)
+        let newPlace = Place(name: placeName.text!,
+                             location: placeLocation.text!,
+                             type: placeType.text!,
+                             imageData: imageData,
+                             rating: Double(ratingControl.rating))
         
         // checking mode creation or editing
-        
         if currentPlace != nil {
             try! realm.write { //Updating the record.
                 currentPlace?.name = newPlace.name
                 currentPlace?.location = newPlace.location
                 currentPlace?.type = newPlace.type
                 currentPlace?.imageData = newPlace.imageData
+                currentPlace?.rating = newPlace.rating
             }
         } else {
         StorageManager.saveObject(newPlace ) // saving object in DB
@@ -124,6 +129,7 @@ class NewPlaceViewController: UITableViewController {
             placeName.text = currentPlace?.name
             placeLocation.text = currentPlace?.location
             placeType.text = currentPlace?.type
+            ratingControl.rating = Int(currentPlace.rating) // showing sorting rating
         }
     }
     
