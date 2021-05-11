@@ -277,6 +277,9 @@
                             <constraint firstItem="BA1-Pn-OQx" firstAttribute="trailing" secondItem="MHl-Nw-uyK" secondAttribute="trailing" constant="20" id="uze-4H-8gz"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mapView" destination="PTV-Vx-0ib" id="fEB-Lk-P29"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1W3-0h-hdd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -320,22 +323,22 @@
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="pFc-hM-hrr">
-                                                    <rect key="frame" x="96" y="8" width="54.5" height="69"/>
+                                                    <rect key="frame" x="96" y="8" width="159" height="69"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hrW-EC-IPo">
-                                                            <rect key="frame" x="0.0" y="0.0" width="54.5" height="24.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="159" height="24.5"/>
                                                             <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="18"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cuq-s0-uRw">
-                                                            <rect key="frame" x="0.0" y="27.5" width="54.5" height="20"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cuq-s0-uRw">
+                                                            <rect key="frame" x="0.0" y="27.5" width="159" height="20"/>
                                                             <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="15"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="17j-eh-LqO">
-                                                            <rect key="frame" x="0.0" y="50.5" width="54.5" height="18.5"/>
+                                                            <rect key="frame" x="0.0" y="50.5" width="159" height="18.5"/>
                                                             <fontDescription key="fontDescription" name="AppleSDGothicNeo-Regular" family="Apple SD Gothic Neo" pointSize="13"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -366,6 +369,7 @@
                                                 <constraint firstItem="pFc-hM-hrr" firstAttribute="top" secondItem="4Y3-q0-fOH" secondAttribute="top" constant="8" id="VD8-Il-omr"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="OI9-Bz-Y2U" secondAttribute="trailing" constant="41" id="fVw-GY-t5x"/>
                                                 <constraint firstItem="xTu-6o-7mc" firstAttribute="centerY" secondItem="4Y3-q0-fOH" secondAttribute="centerY" id="sAD-nC-waI"/>
+                                                <constraint firstItem="OI9-Bz-Y2U" firstAttribute="leading" secondItem="pFc-hM-hrr" secondAttribute="trailing" constant="8" id="zdn-wU-hhJ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
