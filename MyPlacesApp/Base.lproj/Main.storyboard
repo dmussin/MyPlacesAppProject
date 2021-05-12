@@ -265,6 +265,17 @@
                                     <action selector="closeVC" destination="ULT-uo-T62" eventType="touchUpInside" id="7Yf-yt-bzz"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2d-ew-fkg">
+                                <rect key="frame" x="324" y="718" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="81H-eW-UzQ"/>
+                                    <constraint firstAttribute="width" constant="50" id="H5a-0L-YPK"/>
+                                </constraints>
+                                <state key="normal" image="Location"/>
+                                <connections>
+                                    <action selector="centerViewForUserLocation" destination="ULT-uo-T62" eventType="touchUpInside" id="8fB-DD-ql2"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="BA1-Pn-OQx"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -274,6 +285,8 @@
                             <constraint firstItem="MHl-Nw-uyK" firstAttribute="top" secondItem="BA1-Pn-OQx" secondAttribute="top" constant="20" id="fbW-of-597"/>
                             <constraint firstItem="PTV-Vx-0ib" firstAttribute="top" secondItem="ggu-U5-QrM" secondAttribute="top" id="gLV-IL-hfU"/>
                             <constraint firstAttribute="trailing" secondItem="PTV-Vx-0ib" secondAttribute="trailing" id="h2S-Nj-mnX"/>
+                            <constraint firstItem="BA1-Pn-OQx" firstAttribute="trailing" secondItem="b2d-ew-fkg" secondAttribute="trailing" constant="40" id="hDV-Dl-MlW"/>
+                            <constraint firstItem="BA1-Pn-OQx" firstAttribute="bottom" secondItem="b2d-ew-fkg" secondAttribute="bottom" constant="40" id="lBo-3K-no3"/>
                             <constraint firstItem="BA1-Pn-OQx" firstAttribute="trailing" secondItem="MHl-Nw-uyK" secondAttribute="trailing" constant="20" id="uze-4H-8gz"/>
                         </constraints>
                     </view>
@@ -477,6 +490,7 @@
         <segue reference="HYa-nR-oqe"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="Location" width="128" height="128"/>
         <image name="Photo" width="195" height="196"/>
         <image name="arrowtriangle.down.fill" catalog="system" width="128" height="124"/>
         <image name="camcel" width="128" height="128"/>

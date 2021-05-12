@@ -14,6 +14,7 @@ class MapViewController: UIViewController {
     var place = Place()
     let annotationIdentifier = "annotationIdentifier"// value of annotation
     let locationManager = CLLocationManager() // User location manager
+    let regionInMetters =  10_000.00 // Region Value for MKCoordinateRegion
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -26,6 +27,16 @@ class MapViewController: UIViewController {
         
         // Request for location autorization
         checkLocationAuthorization()
+    }
+    
+    // Center location for user button
+    @IBAction func centerViewForUserLocation() {
+        if let location = locationManager.location?.coordinate{
+            let region = MKCoordinateRegion(center: location,
+                                            latitudinalMeters: regionInMetters,
+                                            longitudinalMeters: regionInMetters)
+            mapView.setRegion(region, animated: true)
+        }
     }
     
     @IBAction func closeVC() {
@@ -71,7 +82,11 @@ class MapViewController: UIViewController {
             setupLocationManager()
             checkLocationAuthorization()
         } else {
-            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+                self.showAlert(
+                    title: "Location Services Are Disabled 🚫",
+                    message: "To enable it go: Settings -> Privacy -> Location Services and turn it On 🧐")
+            }
         }
     }
     
@@ -87,7 +102,11 @@ class MapViewController: UIViewController {
             mapView.showsUserLocation = true
             break
         case .restricted, .denied:
-            // show alert
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+                self.showAlert(
+                    title: "Your Location is not Available 📍",
+                    message: "To give a permission go to: Settings -> MyPlacesApp -> Location 👀")
+            }
             break
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
@@ -98,6 +117,19 @@ class MapViewController: UIViewController {
             print("New case is available")
         }
     }
+    
+    
+    // Alert Controller
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
+    
+    
+    
 }
 
 // Pin with banner in Maps.
