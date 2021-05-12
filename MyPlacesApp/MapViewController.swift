@@ -7,13 +7,14 @@
 
 import UIKit
 import MapKit
+import CoreLocation
 
 class MapViewController: UIViewController {
     
-    var place: Place!
+    var place = Place()
     let annotationIdentifier = "annotationIdentifier"// value of annotation
+    let locationManager = CLLocationManager() // User location manager
     
-
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
@@ -22,10 +23,10 @@ class MapViewController: UIViewController {
         
         // calling method setupPlacemark by the transition on ViewController
         setupPlacemark()
+        
+        // Request for location autorization
+        checkLocationAuthorization()
     }
-
-    
-    
     
     @IBAction func closeVC() {
         dismiss(animated: true, completion: nil) // closing mapVC
@@ -50,7 +51,7 @@ class MapViewController: UIViewController {
             annotation.title = self.place.name
             annotation.subtitle = self.place.type
             
-        
+            
             // connecting annotation to mark on map
             guard let placemarkLocation = placemark?.location else { return }
             
@@ -59,11 +60,43 @@ class MapViewController: UIViewController {
             // setting point of view to makee all annotation visible
             self.mapView.showAnnotations([annotation], animated: true)
             self.mapView.selectAnnotation(annotation, animated: true) // selecting annotation
-             
+            
             
         }
-        
-        
+    }
+    
+    // Cheking in location services are enabled
+    private func checkLocationServices() {
+        if CLLocationManager.locationServicesEnabled() {
+            setupLocationManager()
+            checkLocationAuthorization()
+        } else {
+            
+        }
+    }
+    
+    private func setupLocationManager(){
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest // accuracy of positioning
+        locationManager.delegate = self // method and protocol will perform mapViewController
+    }
+    
+    // Method for checking if location was acepted
+    private func checkLocationAuthorization() {
+        switch locationManager.authorizationStatus {
+        case .authorizedWhenInUse:
+            mapView.showsUserLocation = true
+            break
+        case .restricted, .denied:
+            // show alert
+            break
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+            break
+        case .authorizedAlways:
+            break
+        @unknown default:
+            print("New case is available")
+        }
     }
 }
 
@@ -90,7 +123,13 @@ extension MapViewController: MKMapViewDelegate{
             imageView.image = UIImage(data: imageData)
             annotationView?.rightCalloutAccessoryView = imageView // displaying image 
         }
-        
         return annotationView
+    }
+}
+
+// Protocol and method for displaying current position.
+extension MapViewController: CLLocationManagerDelegate{
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        checkLocationAuthorization()
     }
 }

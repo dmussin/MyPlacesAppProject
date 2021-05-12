@@ -9,10 +9,7 @@ import UIKit
 import Cosmos
 
 class NewPlaceViewController: UITableViewController {
-    
-   
-    
-    
+
     var currentPlace: Place! // creating an object for segue navigation (editing a record)
     var imageIsChanged = false   // default image to icon
     var currentRating = 0.0 // var for rating(cosmos)
@@ -89,15 +86,16 @@ class NewPlaceViewController: UITableViewController {
     
     
     // MARK: Navigation
-    // Method for map
     
+    // Method for map
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier != "showMap" {
-            return
-        }
+        if segue.identifier != "showMap" { return }
         
         let mapVC = segue.destination as! MapViewController
-        mapVC.place = currentPlace
+        mapVC.place.name = placeName.text!
+        mapVC.place.location = placeLocation.text
+        mapVC.place.type = placeType.text
+        mapVC.place.imageData = placeImage.image?.pngData()
     }
     
     
@@ -106,13 +104,7 @@ class NewPlaceViewController: UITableViewController {
     func savePlace(){
         
         // setting up image to default or that will be chosen
-        var image: UIImage?
-        
-        if imageIsChanged{
-            image = placeImage.image
-        } else {
-            image = #imageLiteral(resourceName: "imagePlaceholder")
-        }
+        let image = imageIsChanged ? placeImage.image : #imageLiteral(resourceName: "imagePlaceholder")
         
         //Converting type image to Data.
         let imageData = image?.pngData()
