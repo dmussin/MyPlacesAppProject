@@ -15,7 +15,8 @@ class MapViewController: UIViewController {
     let annotationIdentifier = "annotationIdentifier"// value of annotation
     let locationManager = CLLocationManager() // User location manager
     let regionInMetters =  20_000.00 // Region Value for MKCoordinateRegion
-    var incomeSegueIdentifier = "" // Depend on the value different method can be called (showUserLocation or
+    var incomeSegueIdentifier = "" // Depend on the value different method can be called (showUserLocation)
+    
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapPinImage: UIImageView!
@@ -31,6 +32,8 @@ class MapViewController: UIViewController {
         
         // Request for location autorization
         checkLocationAuthorization()
+        
+        adressLabel.text = ""
     }
     
     // Center location for user button
@@ -143,6 +146,16 @@ class MapViewController: UIViewController {
         }
     }
     
+    
+    // Method getting coordinates from map positioning
+    private func getCenterLocation(for mapView: MKMapView) -> CLLocation {
+        let latitude = mapView.centerCoordinate.latitude
+        let longitude = mapView.centerCoordinate.longitude
+        
+        return CLLocation(latitude: latitude, longitude: longitude)
+    }
+    
+    
     // Alert Controller
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -181,6 +194,37 @@ extension MapViewController: MKMapViewDelegate{
         }
         return annotationView
     }
+    
+    // changing coordinates to adress
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        let center = getCenterLocation(for: mapView)
+        let geocoder = CLGeocoder()
+        
+        geocoder.reverseGeocodeLocation(center) { placemarks, error in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            guard let placemarks = placemarks else { return }
+            let placemark = placemarks.first
+            let streetName = placemark?.thoroughfare
+            let buildNumber = placemark?.subThoroughfare
+            
+            DispatchQueue.main.async {
+                
+                if streetName != nil && buildNumber != nil {
+                    self.adressLabel.text = "\(streetName!), \(buildNumber!)"
+                } else if streetName != nil {
+                    self.adressLabel.text = "\(streetName!)"
+                } else {
+                    self.adressLabel.text = ""
+                }
+            }
+        }
+    }
+    
+    
 }
 
 // Protocol and method for displaying current position.
