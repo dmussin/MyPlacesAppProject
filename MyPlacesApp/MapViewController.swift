@@ -14,16 +14,20 @@ class MapViewController: UIViewController {
     var place = Place()
     let annotationIdentifier = "annotationIdentifier"// value of annotation
     let locationManager = CLLocationManager() // User location manager
-    let regionInMetters =  10_000.00 // Region Value for MKCoordinateRegion
+    let regionInMetters =  20_000.00 // Region Value for MKCoordinateRegion
+    var incomeSegueIdentifier = "" // Depend on the value different method can be called (showUserLocation or
     
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapPinImage: UIImageView!
+    @IBOutlet weak var adressLabel: UILabel!
+    @IBOutlet weak var doneButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         
-        // calling method setupPlacemark by the transition on ViewController
-        setupPlacemark()
+        // calling method setupMapView
+        setupMapView()
         
         // Request for location autorization
         checkLocationAuthorization()
@@ -31,17 +35,26 @@ class MapViewController: UIViewController {
     
     // Center location for user button
     @IBAction func centerViewForUserLocation() {
-        if let location = locationManager.location?.coordinate{
-            let region = MKCoordinateRegion(center: location,
-                                            latitudinalMeters: regionInMetters,
-                                            longitudinalMeters: regionInMetters)
-            mapView.setRegion(region, animated: true)
-        }
+      showUserLocation()
     }
     
     @IBAction func closeVC() {
         dismiss(animated: true, completion: nil) // closing mapVC
     }
+    
+    @IBAction func doneButtonPressed() {
+    }
+    
+    // calling method setupPlacemark by the transition on ViewController if segue is showPlace
+    private func setupMapView(){
+        if incomeSegueIdentifier == "showPlace" {
+            setupPlacemark()
+            mapPinImage.isHidden = true // hiding PinImage Marker if segue is showPlace
+            adressLabel.isHidden = true // hiding Adress Label
+            doneButton.isHidden = true // hiding Done Button
+        }
+    }
+    
     
     // marker that shows location of the place.
     private func setupPlacemark(){
@@ -100,6 +113,7 @@ class MapViewController: UIViewController {
         switch locationManager.authorizationStatus {
         case .authorizedWhenInUse:
             mapView.showsUserLocation = true
+            if incomeSegueIdentifier == "getAdress" { showUserLocation() } //calling method showUserLocation
             break
         case .restricted, .denied:
             DispatchQueue.main.asyncAfter(deadline: .now() + 1){
@@ -118,6 +132,16 @@ class MapViewController: UIViewController {
         }
     }
     
+    
+    // Method for showing user location
+    private func showUserLocation(){
+        if let location = locationManager.location?.coordinate{
+            let region = MKCoordinateRegion(center: location,
+                                            latitudinalMeters: regionInMetters,
+                                            longitudinalMeters: regionInMetters)
+            mapView.setRegion(region, animated: true)
+        }
+    }
     
     // Alert Controller
     private func showAlert(title: String, message: String) {

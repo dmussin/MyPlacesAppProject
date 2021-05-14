@@ -89,15 +89,20 @@ class NewPlaceViewController: UITableViewController {
     
     // Method for map
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier != "showMap" { return }
         
-        let mapVC = segue.destination as! MapViewController
+        guard let identifier = segue.identifier,
+              let mapVC = segue.destination as? MapViewController
+        else { return }
+        
+        mapVC.incomeSegueIdentifier = identifier
+        
+        if identifier == "showPlace" {
         mapVC.place.name = placeName.text!
         mapVC.place.location = placeLocation.text
         mapVC.place.type = placeType.text
         mapVC.place.imageData = placeImage.image?.pngData()
     }
-    
+    }
     
     
     // creating a method for save button action
