@@ -20,7 +20,7 @@ class MapViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapPinImage: UIImageView!
-    @IBOutlet weak var adressLabel: UILabel!
+    @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var doneButton: UIButton!
     
     override func viewDidLoad() {
@@ -33,7 +33,7 @@ class MapViewController: UIViewController {
         // Request for location autorization
         checkLocationAuthorization()
         
-        adressLabel.text = ""
+        addressLabel.text = ""
     }
     
     // Center location for user button
@@ -53,7 +53,7 @@ class MapViewController: UIViewController {
         if incomeSegueIdentifier == "showPlace" {
             setupPlacemark()
             mapPinImage.isHidden = true // hiding PinImage Marker if segue is showPlace
-            adressLabel.isHidden = true // hiding Adress Label
+            addressLabel.isHidden = true // hiding Adress Label
             doneButton.isHidden = true // hiding Done Button
         }
     }
@@ -214,11 +214,11 @@ extension MapViewController: MKMapViewDelegate{
             DispatchQueue.main.async {
                 
                 if streetName != nil && buildNumber != nil {
-                    self.adressLabel.text = "\(streetName!), \(buildNumber!)"
+                    self.addressLabel.text = "\(streetName!), \(buildNumber!)"
                 } else if streetName != nil {
-                    self.adressLabel.text = "\(streetName!)"
+                    self.addressLabel.text = "\(streetName!)"
                 } else {
-                    self.adressLabel.text = ""
+                    self.addressLabel.text = ""
                 }
             }
         }
