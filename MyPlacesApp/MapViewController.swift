@@ -9,9 +9,16 @@ import UIKit
 import MapKit
 import CoreLocation
 
+// Creating protocol for transfering data from MapViewController to NewPlaceViewController
+protocol MapViewControllerDelegate {
+   func getAddress(_ address: String?)
+}
+
 class MapViewController: UIViewController {
     
+    var mapViewControllerDelegate: MapViewControllerDelegate?
     var place = Place()
+    
     let annotationIdentifier = "annotationIdentifier"// value of annotation
     let locationManager = CLLocationManager() // User location manager
     let regionInMetters =  20_000.00 // Region Value for MKCoordinateRegion
@@ -46,6 +53,8 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func doneButtonPressed() {
+        mapViewControllerDelegate?.getAddress(addressLabel.text) // sending to param getAddress - current address
+        dismiss(animated: true) // Closing VC 
     }
     
     // calling method setupPlacemark by the transition on ViewController if segue is showPlace
@@ -116,7 +125,7 @@ class MapViewController: UIViewController {
         switch locationManager.authorizationStatus {
         case .authorizedWhenInUse:
             mapView.showsUserLocation = true
-            if incomeSegueIdentifier == "getAdress" { showUserLocation() } //calling method showUserLocation
+            if incomeSegueIdentifier == "getAddress" { showUserLocation() } //calling method showUserLocation
             break
         case .restricted, .denied:
             DispatchQueue.main.asyncAfter(deadline: .now() + 1){
