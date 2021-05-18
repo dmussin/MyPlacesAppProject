@@ -23,12 +23,16 @@ class MapViewController: UIViewController {
     let locationManager = CLLocationManager() // User location manager
     let regionInMetters =  20_000.00 // Region Value for MKCoordinateRegion
     var incomeSegueIdentifier = "" // Depend on the value different method can be called (showUserLocation)
+    var placeCoordinate: CLLocationCoordinate2D? // coordinates
     
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapPinImage: UIImageView!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet weak var goButton: UIButton!
+    @IBOutlet weak var distanceLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +55,9 @@ class MapViewController: UIViewController {
     @IBAction func closeVC() {
         dismiss(animated: true, completion: nil) // closing mapVC
     }
+    @IBAction func goButtonPressed() {
+       getDirections()
+    }
     
     @IBAction func doneButtonPressed() {
         mapViewControllerDelegate?.getAddress(addressLabel.text) // sending to param getAddress - current address
@@ -59,11 +66,18 @@ class MapViewController: UIViewController {
     
     // calling method setupPlacemark by the transition on ViewController if segue is showPlace
     private func setupMapView(){
+        
+        goButton.isHidden = true
+        distanceLabel.isHidden = true
+        timeLabel.isHidden = true
+        
         if incomeSegueIdentifier == "showPlace" {
             setupPlacemark()
             mapPinImage.isHidden = true // hiding PinImage Marker if segue is showPlace
             addressLabel.isHidden = true // hiding Adress Label
             doneButton.isHidden = true // hiding Done Button
+            goButton.isHidden = false
+           
         }
     }
     
@@ -92,6 +106,7 @@ class MapViewController: UIViewController {
             guard let placemarkLocation = placemark?.location else { return }
             
             annotation.coordinate = placemarkLocation.coordinate
+            self.placeCoordinate = placemarkLocation.coordinate // transfering coordinates to placeCoordinate
             
             // setting point of view to makee all annotation visible
             self.mapView.showAnnotations([annotation], animated: true)
@@ -165,6 +180,70 @@ class MapViewController: UIViewController {
     }
     
     
+    //Method for navigation logic
+    private func getDirections() {
+        // getting user location
+        guard let location = locationManager.location?.coordinate else {
+            showAlert(title: "Error", message: "Current Location is Not Found")
+            return
+        }
+        guard let request = createDirectionRequest(from: location) //current user location as a value
+        else {
+            showAlert(title: "Error", message: "Destination is not found")
+            return
+        }
+        
+        let directions = MKDirections(request: request)  //creating a route
+        directions.calculate { (response, error) in // Route calculation
+            if let error = error {
+                print(error)
+                return
+            }
+            guard let response = response else {
+                self.showAlert(title: "Error", message: "Direction is not available")
+                return
+            }
+            
+            // Object response contain array route with the routes
+            // Sorting out the array
+            for route in response.routes {
+                self.mapView.addOverlay(route.polyline)
+                self.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true) // Whole route is visible
+                let distance = String(format: "%.1f", route.distance / 1000) // Distance
+                let timeInterval = String(format: "%.1f", route.expectedTravelTime / 60)
+                
+                self.distanceLabel.isHidden = false
+                self.timeLabel.isHidden = false
+                
+                self.distanceLabel.text = "Distance: \(distance) km"
+                self.timeLabel.text = "Travel time: \(timeInterval) Min"
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                    self.distanceLabel.isHidden = true
+                    self.timeLabel.isHidden = true
+                }
+            }
+        }
+    }
+    
+    //Method for request for creation a route
+    private func createDirectionRequest(from coordinate: CLLocationCoordinate2D) -> MKDirections.Request? {
+        
+        guard let destinationCoordinate = placeCoordinate else { return nil }
+        let startingLocation = MKPlacemark(coordinate: coordinate)  // start location
+        let destination = MKPlacemark(coordinate: destinationCoordinate) // destination location
+        
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: startingLocation)
+        request.destination = MKMapItem(placemark: destination)
+        request.transportType = .automobile
+        
+        request.requestsAlternateRoutes = true
+        
+        return request
+        
+    }
+    
     // Alert Controller
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -233,6 +312,12 @@ extension MapViewController: MKMapViewDelegate{
         }
     }
     
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline) // rendered superposition
+        renderer.strokeColor = .orange
+        
+        return renderer
+    }
     
 }
 

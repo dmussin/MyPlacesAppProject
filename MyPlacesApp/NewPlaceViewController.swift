@@ -196,6 +196,7 @@ extension NewPlaceViewController: UITextFieldDelegate {
 }
 
 
+
 // MARK: Work with image
 extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
