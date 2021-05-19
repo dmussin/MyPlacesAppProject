@@ -21,10 +21,16 @@ class MapViewController: UIViewController {
     
     let annotationIdentifier = "annotationIdentifier"// value of annotation
     let locationManager = CLLocationManager() // User location manager
-    let regionInMetters =  20_000.00 // Region Value for MKCoordinateRegion
+    let regionInMetters =  1000.00 // Region Value for MKCoordinateRegion
     var incomeSegueIdentifier = "" // Depend on the value different method can be called (showUserLocation)
     var placeCoordinate: CLLocationCoordinate2D? // coordinates
-    
+    var directionsArray: [MKDirections] = [] // Array for directions (for canceling when starting new route after the position change)
+    // property for storing previous Location
+    var previousLocation: CLLocation? {
+        didSet {
+    startTrackingUserLocation()
+     }
+    }
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var mapPinImage: UIImageView!
@@ -79,6 +85,16 @@ class MapViewController: UIViewController {
             goButton.isHidden = false
            
         }
+    }
+    
+    // Method for reseting MapView
+    private func resetMapView(withNew directions: MKDirections) {
+        mapView.removeOverlays(mapView.overlays) // removing overlays on map
+        directionsArray.append(directions) // adding direction to Array
+        let _ = directionsArray.map {$0.cancel()}// reseting a route
+        directionsArray.removeAll()
+        
+        
     }
     
     
@@ -160,13 +176,25 @@ class MapViewController: UIViewController {
     }
     
     
-    // Method for showing user location
+    // Method showing user location
     private func showUserLocation(){
         if let location = locationManager.location?.coordinate{
             let region = MKCoordinateRegion(center: location,
                                             latitudinalMeters: regionInMetters,
                                             longitudinalMeters: regionInMetters)
             mapView.setRegion(region, animated: true)
+        }
+    }
+    
+    // Method tracking user location
+    private func startTrackingUserLocation(){
+        guard let previousLocation = previousLocation else { return }
+        let center = getCenterLocation(for: mapView)
+        guard center.distance(from: previousLocation) > 50 else { return }
+        self.previousLocation = center
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.showUserLocation()
         }
     }
     
@@ -187,6 +215,10 @@ class MapViewController: UIViewController {
             showAlert(title: "Error", message: "Current Location is Not Found")
             return
         }
+        
+        locationManager.startUpdatingLocation() // tracking location
+        previousLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
+        
         guard let request = createDirectionRequest(from: location) //current user location as a value
         else {
             showAlert(title: "Error", message: "Destination is not found")
@@ -194,6 +226,8 @@ class MapViewController: UIViewController {
         }
         
         let directions = MKDirections(request: request)  //creating a route
+        resetMapView(withNew: directions) // deleting the routes
+        
         directions.calculate { (response, error) in // Route calculation
             if let error = error {
                 print(error)
@@ -238,7 +272,8 @@ class MapViewController: UIViewController {
         request.destination = MKMapItem(placemark: destination)
         request.transportType = .automobile
         
-        request.requestsAlternateRoutes = true
+        // alernative route
+        request.requestsAlternateRoutes = false
         
         return request
         
@@ -287,6 +322,16 @@ extension MapViewController: MKMapViewDelegate{
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let center = getCenterLocation(for: mapView)
         let geocoder = CLGeocoder()
+        
+        // automatic fokusing on user current location
+        if incomeSegueIdentifier  == "showPlace" && previousLocation != nil {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.showUserLocation()
+            }
+        }
+        
+        // optimizing resources - canceling deffered requests
+        geocoder.cancelGeocode()
         
         geocoder.reverseGeocodeLocation(center) { placemarks, error in
             if let error = error {
