@@ -382,12 +382,12 @@
                     </view>
                     <connections>
                         <outlet property="addressLabel" destination="5NV-A1-c8C" id="vlR-a5-reQ"/>
-                        <outlet property="distanceLabel" destination="ymb-Q5-4DT" id="ETh-3D-hKH"/>
+                        <outlet property="distanceLabel" destination="ymb-Q5-4DT" id="B9B-65-PcV"/>
                         <outlet property="doneButton" destination="AQy-Uq-gw4" id="AK9-Sp-RW8"/>
                         <outlet property="goButton" destination="tht-IO-Vx0" id="BCZ-yu-4FS"/>
                         <outlet property="mapPinImage" destination="8VO-ZJ-F7R" id="cnP-KR-cL6"/>
                         <outlet property="mapView" destination="PTV-Vx-0ib" id="fEB-Lk-P29"/>
-                        <outlet property="timeLabel" destination="Jwj-Um-VOG" id="rbv-Mr-Z6q"/>
+                        <outlet property="timeLabel" destination="Jwj-Um-VOG" id="fCX-lk-pMM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1W3-0h-hdd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -538,7 +538,7 @@
             <objects>
                 <navigationController id="HXH-Zh-X91" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fCK-0u-9kU">
-                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="104.5"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="AppleSDGothicNeo-Medium" family="Apple SD Gothic Neo" pointSize="29"/>
